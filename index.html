@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<head>
+    <title>RPS</title>
+</head>
+<body>
+    <script>
+        //game starts a round of RPS and then updates the set score until the player or the computer wins a best of 5.
+        function game() {
+            let playerWinCount = 0
+            let computerWinCount = 0
+            while (playerWinCount < 3 && computerWinCount < 3) {
+                switch (playRound(playerWinCount, computerWinCount)) {
+                    case "W":
+                        playerWinCount++
+                        break
+                    case "L":
+                        computerWinCount++
+                        break
+                }
+            }
+            if (playerWinCount == 3) {
+                console.log(`You win the set ${playerWinCount} - ${computerWinCount}!`)
+            } else if (computerWinCount == 3) {
+                console.log(`You lose the set ${playerWinCount} - ${computerWinCount}!`)
+            }
+        }
+        //playRound gets the Rock, Paper, or Scissors from the player and Computer and sends them to gameRound.
+        function playRound(playerWinCount, computerWinCount) {
+            let playerSelection = formatSelection(window.prompt ("Rock, Paper, or Scissors?"))
+            let computerSelection = computerPlay()
+            let roundResult = gameRound(playerSelection, computerSelection, playerWinCount, computerWinCount)
+            console.log(roundResult)
+            return roundResult[4]
+        }
+        //formatSelection clears whitespace from the player's input and makes the first letter a capital and the rest lowercase.
+        function formatSelection(playerInput) {
+                let trimmedInput = playerInput.trim()
+                let firstChar = trimmedInput.charAt(0)
+                let firstCharCapital = firstChar.toUpperCase()
+                let lowerCase = trimmedInput.toLowerCase()
+                let restOfStr = lowerCase.slice(1)
+                let playerSelection = firstCharCapital + restOfStr
+                return playerSelection;
+        }
+        //computerPlay randomly chooses Rock, Paper, or Scissors.
+        function computerPlay() {
+            let randInt = Math.floor(Math.random() * 3)
+            switch (randInt) {
+                case 0:
+                    return "Rock"
+                case 1:
+                    return "Paper"
+                case 2:
+                    return "Scissors"
+            }
+        }
+        //gameRound chooses the winner of a round based on the player and computer selections.
+        function gameRound(playerSelection, computerSelection, playerWinCount, computerWinCount) {
+            switch (playerSelection) {
+                case "Rock":
+                    if (computerSelection == "Rock") {
+                        return nameResult("Tie", playerSelection, computerSelection, playerWinCount, computerWinCount)
+                    } else if (computerSelection == "Paper") {
+                        return nameResult("Lose", playerSelection, computerSelection, playerWinCount, computerWinCount)
+                    } else if (computerSelection == "Scissors") {
+                        return nameResult("Win", playerSelection, computerSelection, playerWinCount, computerWinCount)
+                    }
+                case "Paper":
+                    if (computerSelection == "Rock") {
+                        return nameResult("Win", playerSelection, computerSelection, playerWinCount, computerWinCount)
+                    } else if (computerSelection == "Paper") {
+                        return nameResult("Tie", playerSelection, computerSelection, playerWinCount, computerWinCount)
+                    } else if (computerSelection == "Scissors") {
+                        return nameResult("Lose", playerSelection, computerSelection, playerWinCount, computerWinCount)
+                    }
+                case "Scissors":
+                    if (computerSelection == "Rock") {
+                        return nameResult("Lose", playerSelection, computerSelection, playerWinCount, computerWinCount)
+                    } else if (computerSelection == "Paper") {
+                        return nameResult("Win", playerSelection, computerSelection, playerWinCount, computerWinCount)
+                    } else if (computerSelection == "Scissors") {
+                        return nameResult("Tie", playerSelection, computerSelection, playerWinCount, computerWinCount)
+                    }
+                default:
+                        return `Please choose Rock, Paper, or Scissors!`
+            }
+        }
+        //nameResult returns a string declaring that round's winner and the current set score. This string is printed in playRound.
+        function nameResult(gameResult, playerSelection, computerSelection, playerWinCount, computerWinCount) {
+            switch (gameResult) {
+                case "Win":
+                    if (playerWinCount < 2) {
+                        return `You Win! ` + playerSelection + ` beats ` + computerSelection + `. Set score is ${playerWinCount + 1} - ${computerWinCount}.`
+                    } else {
+                        return `You Win! ` + playerSelection + ` beats ` + computerSelection + `.`
+                    }
+                case "Lose": 
+                    if (computerWinCount < 2) {
+                    return `You Lose! ` + computerSelection + ` beats ` + playerSelection + `. Set score is ${playerWinCount} - ${computerWinCount +1}.`
+                    } else {
+                        return `You Lose! ` + computerSelection + ` beats ` + playerSelection + `.`
+                    }
+                case "Tie":
+                    return `You Tie!` + `. Set score is ${playerWinCount} - ${computerWinCount}.`
+            }
+        }
+
+        //Runs the game upon opening page.
+        game()
+    </script>
+</body>
